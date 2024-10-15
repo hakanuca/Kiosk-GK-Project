@@ -3243,6 +3243,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   udpReceive: {fileID: 1224533909}
+  handPoints:
+  - {fileID: 586559102}
+  - {fileID: 373214342}
+  - {fileID: 1536345052}
+  - {fileID: 1949607658}
+  - {fileID: 1557988387}
+  - {fileID: 294362461}
+  - {fileID: 1889264194}
+  - {fileID: 696264746}
+  - {fileID: 643655903}
+  - {fileID: 1861349404}
+  - {fileID: 485008725}
+  - {fileID: 291751480}
+  - {fileID: 888111484}
+  - {fileID: 1430578681}
+  - {fileID: 1471891382}
+  - {fileID: 1110237361}
+  - {fileID: 380562569}
+  - {fileID: 857091453}
+  - {fileID: 1537852799}
+  - {fileID: 1272180917}
+  - {fileID: 2085305036}
 --- !u!1 &1228876544
 GameObject:
   m_ObjectHideFlags: 0
