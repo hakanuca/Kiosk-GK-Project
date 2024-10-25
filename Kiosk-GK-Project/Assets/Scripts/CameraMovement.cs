@@ -3,9 +3,9 @@ using UnityEngine.UI;
 
 public class CameraMovement : MonoBehaviour
 {
-    public Vector3 startPosition = new Vector3(0, 11, -13);
-    public float targetY = 1.14f;
-    public float targetZ = -7.63f;
+    public Vector3 startPosition = new Vector3(0, 11, 6.80f);
+    public float targetY = 1.2f;
+    public float targetZ = 12.1f;
     public float ySpeed = 2f;
     public float zSpeed = 2f;
     public Button startButton;           // Reference to the start button
