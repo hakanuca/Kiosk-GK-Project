@@ -8,8 +8,13 @@ public class Spawner : MonoBehaviour
     // Interval between each sphere spawn (in seconds)
     public float spawnInterval = 1.0f;
 
-    // Force applied to throw the sphere in the -Z direction
-    public float throwForce = 500.0f;
+    // Min and max force to throw the sphere
+    public float minThrowForce = 700.0f;
+    public float maxThrowForce = 1800.0f;
+
+    // Min and max values for the curve force (random sideways force)
+    public float minCurveForce = -50.0f;
+    public float maxCurveForce = 50.0f;
 
     // Timer to control spawn interval
     private float timer;
@@ -44,14 +49,27 @@ public class Spawner : MonoBehaviour
         // Instantiate the sphere prefab at the spawn position
         GameObject sphere = Instantiate(spherePrefab, spawnPosition, Quaternion.identity);
 
+        // Destroy the sphere after 5 seconds
+        Destroy(sphere, 5f);
+
         // Make sure the sphere has a Rigidbody to apply force
         Rigidbody sphereRigidbody = sphere.GetComponent<Rigidbody>();
 
-        // If the sphere has a Rigidbody, apply force to throw it along the -Z axis
+        // If the sphere has a Rigidbody, apply random force to throw it with a curve effect
         if (sphereRigidbody != null)
         {
-            // Apply a force in the reverse direction (opposite of the Z-axis)
-            sphereRigidbody.AddForce(-transform.forward * throwForce);
+            // Randomize the throw force within the defined range
+            float randomizedThrowForce = Random.Range(minThrowForce, maxThrowForce);
+
+            // Randomize the curve force within the defined range
+            float randomizedCurveForce = Random.Range(minCurveForce, maxCurveForce);
+
+            // Calculate the force direction with a curve effect
+            Vector3 throwDirection = -transform.forward * randomizedThrowForce;
+            throwDirection += transform.right * randomizedCurveForce; // Adds a random sideways curve effect
+
+            // Apply the calculated force
+            sphereRigidbody.AddForce(throwDirection);
         }
         else
         {

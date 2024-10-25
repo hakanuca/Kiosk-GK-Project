@@ -9,8 +9,11 @@ public class CameraMovement : MonoBehaviour
     public float ySpeed = 2f;
     public float zSpeed = 2f;
     public Button startButton;           // Reference to the start button
-    public GameObject resultObject;      // Game object to display after movement
-    public GameObject nextObject;        // Game object to activate after resultObject closes
+    public Button quitButton;           // Reference to the start button
+
+    public GameObject goText;      // Game object to display after movement
+    public GameObject ballSpawner;        // Game object to activate after resultObject closes
+    public GameObject title;
 
     private bool yMovementCompleted = false;
     private bool isMovementStarted = false;
@@ -18,8 +21,8 @@ public class CameraMovement : MonoBehaviour
     void Start()
     {
         transform.position = startPosition;
-        resultObject.SetActive(false);   // Hide the result object at the start
-        nextObject.SetActive(false);     // Hide the next object at the start
+        goText.SetActive(false);   // Hide the result object at the start
+        ballSpawner.SetActive(false);     // Hide the next object at the start
     }
 
     void Update()
@@ -35,6 +38,9 @@ public class CameraMovement : MonoBehaviour
     {
         isMovementStarted = true;
         startButton.gameObject.SetActive(false); // Hide the button after clicking
+        quitButton.gameObject.SetActive(false);
+        title.SetActive(false);
+        
     }
 
     System.Collections.IEnumerator MoveCamera()
@@ -61,11 +67,11 @@ public class CameraMovement : MonoBehaviour
 
     System.Collections.IEnumerator ShowResultObject()
     {
-        resultObject.SetActive(true); // Show the object
+        goText.SetActive(true); // Show the object
         yield return new WaitForSeconds(2); // Wait for 2 seconds
-        resultObject.SetActive(false); // Hide the object after 2 seconds
+        goText.SetActive(false); // Hide the object after 2 seconds
 
         // Activate the next object after resultObject is hidden
-        nextObject.SetActive(true);
+        ballSpawner.SetActive(true);
     }
 }
