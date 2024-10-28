@@ -19,6 +19,6 @@ public class GoalCounter : MonoBehaviour
     // Update the goal count text in the UI
     private void UpdateGoalText()
     {
-        goalText.text = "Goals: " + goalCount;
+        goalText.text = "GOALS: " + goalCount;
     }
 }

@@ -8,21 +8,29 @@ public class CameraMovement : MonoBehaviour
     public float targetZ = 12.1f;
     public float ySpeed = 2f;
     public float zSpeed = 2f;
-    public Button startButton;           // Reference to the start button
-    public Button quitButton;           // Reference to the start button
-
-    public GameObject goText;      // Game object to display after movement
-    public GameObject ballSpawner;        // Game object to activate after resultObject closes
+    public Button startButton;
+    public Button quitButton;
+    public GameObject goText;
+    public GameObject ballSpawner;
     public GameObject title;
 
-    private bool yMovementCompleted = false;
+    public float fadeDuration = 0.5f; // Duration for fade-out effect
+
+    private CanvasGroup startButtonCanvasGroup;
+    private CanvasGroup quitButtonCanvasGroup;
+    private CanvasGroup titleCanvasGroup;
     private bool isMovementStarted = false;
 
     void Start()
     {
         transform.position = startPosition;
-        goText.SetActive(false);   // Hide the result object at the start
-        ballSpawner.SetActive(false);     // Hide the next object at the start
+        goText.SetActive(false);
+        ballSpawner.SetActive(false);
+
+        // Get or add CanvasGroup components
+        startButtonCanvasGroup = startButton.GetComponent<CanvasGroup>() ?? startButton.gameObject.AddComponent<CanvasGroup>();
+        quitButtonCanvasGroup = quitButton.GetComponent<CanvasGroup>() ?? quitButton.gameObject.AddComponent<CanvasGroup>();
+        titleCanvasGroup = title.GetComponent<CanvasGroup>() ?? title.AddComponent<CanvasGroup>();
     }
 
     void Update()
@@ -37,41 +45,58 @@ public class CameraMovement : MonoBehaviour
     public void StartCameraMovement()
     {
         isMovementStarted = true;
-        startButton.gameObject.SetActive(false); // Hide the button after clicking
+        StartCoroutine(FadeOutUI()); // Start the fade-out effect for the UI elements
+    }
+
+    private System.Collections.IEnumerator FadeOutUI()
+    {
+        float elapsed = 0f;
+        while (elapsed < fadeDuration)
+        {
+            float alpha = Mathf.Lerp(1, 0, elapsed / fadeDuration);
+
+            // Set alpha for each CanvasGroup
+            startButtonCanvasGroup.alpha = alpha;
+            quitButtonCanvasGroup.alpha = alpha;
+            titleCanvasGroup.alpha = alpha;
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        // Set alpha to 0 to ensure it's fully transparent
+        startButtonCanvasGroup.alpha = 0;
+        quitButtonCanvasGroup.alpha = 0;
+        titleCanvasGroup.alpha = 0;
+
+        // Optionally, disable the UI elements after fading out
+        startButton.gameObject.SetActive(false);
         quitButton.gameObject.SetActive(false);
         title.SetActive(false);
-        
     }
 
     System.Collections.IEnumerator MoveCamera()
     {
-        // Move in the Y direction first
         while (transform.position.y > targetY)
         {
             transform.position = Vector3.MoveTowards(transform.position, new Vector3(startPosition.x, targetY, startPosition.z), ySpeed * Time.deltaTime);
             yield return null;
         }
-        
-        yMovementCompleted = true;
 
-        // Move in the Z direction
         while (transform.position.z < targetZ)
         {
             transform.position = Vector3.MoveTowards(transform.position, new Vector3(startPosition.x, targetY, targetZ), zSpeed * Time.deltaTime);
             yield return null;
         }
 
-        // Show the result object after camera movement completes
         StartCoroutine(ShowResultObject());
     }
 
     System.Collections.IEnumerator ShowResultObject()
     {
-        goText.SetActive(true); // Show the object
-        yield return new WaitForSeconds(2); // Wait for 2 seconds
-        goText.SetActive(false); // Hide the object after 2 seconds
-
-        // Activate the next object after resultObject is hidden
+        goText.SetActive(true);
+        yield return new WaitForSeconds(2);
+        goText.SetActive(false);
         ballSpawner.SetActive(true);
     }
 }
