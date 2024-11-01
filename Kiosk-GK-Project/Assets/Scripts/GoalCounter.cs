@@ -3,22 +3,37 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-
 public class GoalCounter : MonoBehaviour
 {
     public Text goalText;  // Reference to UI Text to display the goal count
     private int goalCount = 0;
     public GameObject gameOverText;
     public GameObject ballSpawner;
+    public AudioClip goalSound; // Drag your sound clip here in the inspector
+    private AudioSource audioSource;
     
-    
+    // Start is called before the first frame update
+    void Start()
+    {
+        // Get or add an AudioSource component to the ball
+        audioSource = gameObject.GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+        audioSource.clip = goalSound;
+    }
+
     // This method is called when another collider enters the trigger collider
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Ball")  // Check if the colliding object is the Ball
+        if (other.gameObject.CompareTag("Ball"))  // Check if the colliding object is the Ball
         {
             goalCount++;  // Increase the goal count
             UpdateGoalText();  // Update the displayed text
+
+            // Play the goal sound when the ball enters the goal
+            audioSource.Play();
         }
     }
 
@@ -29,11 +44,10 @@ public class GoalCounter : MonoBehaviour
         if (goalCount == 10)
         {
             CallGameOverFunction();
-
         }
     }
 
-    // The function close the game after the reached maximum goal
+    // The function close the game after reaching the maximum goal
     private void CallGameOverFunction()
     {
         ballSpawner.SetActive(false);

@@ -19,10 +19,21 @@ public class Spawner : MonoBehaviour
     // Timer to control spawn interval
     private float timer;
 
+    // Sound to play on every spawn
+    public AudioClip spawnSound;
+    private AudioSource audioSource;
+
     void Start()
     {
         // Initialize timer to 0
         timer = 0.0f;
+
+        // Get or add an AudioSource component for playing the spawn sound
+        audioSource = gameObject.GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
     }
 
     void Update()
@@ -51,6 +62,12 @@ public class Spawner : MonoBehaviour
 
         // Destroy the sphere after 5 seconds
         Destroy(sphere, 5f);
+
+        // Play the spawn sound
+        if (spawnSound != null)
+        {
+            audioSource.PlayOneShot(spawnSound);
+        }
 
         // Make sure the sphere has a Rigidbody to apply force
         Rigidbody sphereRigidbody = sphere.GetComponent<Rigidbody>();
