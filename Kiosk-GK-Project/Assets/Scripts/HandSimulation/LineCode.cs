@@ -12,8 +12,8 @@ public class LineCode : MonoBehaviour
     {
         // This is a GoalKeeper Hand Simulation because of that the hand imitation should be look like hand simulation
         lineRenderer = GetComponent<LineRenderer>();
-        lineRenderer.startWidth = 0.15f; // this is the starting point width of the line renderer
-        lineRenderer.endWidth = 0.15f; // this is the ending point width of the line renderer
+        lineRenderer.startWidth = 0.12f; // this is the starting point width of the line renderer
+        lineRenderer.endWidth = 0.12f; // this is the ending point width of the line renderer
     }
 
     void Update()
