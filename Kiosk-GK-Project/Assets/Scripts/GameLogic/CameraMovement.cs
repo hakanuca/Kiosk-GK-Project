@@ -13,12 +13,14 @@ public class CameraMovement : MonoBehaviour
     public GameObject goText;
     public GameObject ballSpawner;
     public GameObject title;
+    public Button menuButton; 
 
     public float fadeDuration = 0.5f; // Duration for fade-out effect
 
     private CanvasGroup startButtonCanvasGroup;
     private CanvasGroup quitButtonCanvasGroup;
     private CanvasGroup titleCanvasGroup;
+    private CanvasGroup menuButtonCanvasGroup; // New Menu button CanvasGroup
     private bool isMovementStarted = false;
 
     void Start()
@@ -31,6 +33,11 @@ public class CameraMovement : MonoBehaviour
         startButtonCanvasGroup = startButton.GetComponent<CanvasGroup>() ?? startButton.gameObject.AddComponent<CanvasGroup>();
         quitButtonCanvasGroup = quitButton.GetComponent<CanvasGroup>() ?? quitButton.gameObject.AddComponent<CanvasGroup>();
         titleCanvasGroup = title.GetComponent<CanvasGroup>() ?? title.AddComponent<CanvasGroup>();
+        menuButtonCanvasGroup = menuButton.GetComponent<CanvasGroup>() ?? menuButton.gameObject.AddComponent<CanvasGroup>();
+
+        // Set initial state for menu button
+        menuButtonCanvasGroup.alpha = 0; // Invisible initially
+        menuButton.gameObject.SetActive(false); // Inactive initially
     }
 
     void Update()
@@ -73,6 +80,29 @@ public class CameraMovement : MonoBehaviour
         startButton.gameObject.SetActive(false);
         quitButton.gameObject.SetActive(false);
         title.SetActive(false);
+
+        // Fade in the Menu button
+        StartCoroutine(FadeInMenuButton());
+    }
+
+    private System.Collections.IEnumerator FadeInMenuButton()
+    {
+        menuButton.gameObject.SetActive(true); // Activate the button
+        float elapsed = 0f;
+
+        while (elapsed < fadeDuration)
+        {
+            float alpha = Mathf.Lerp(0, 1, elapsed / fadeDuration);
+
+            // Set alpha for Menu button
+            menuButtonCanvasGroup.alpha = alpha;
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        // Ensure alpha is fully set to 1
+        menuButtonCanvasGroup.alpha = 1;
     }
 
     System.Collections.IEnumerator MoveCamera()
