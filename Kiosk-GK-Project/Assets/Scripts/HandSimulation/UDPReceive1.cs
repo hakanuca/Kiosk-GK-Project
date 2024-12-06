@@ -5,16 +5,16 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
-public class UDPReceive : MonoBehaviour
+public class UDPReceive1 : MonoBehaviour
 {
     Thread receiveThread;
     UdpClient client;
-    public int port = 5052;
+    public int port = 5053;
     public bool startReceiving = true;
     public bool printToConsole = false;
     public string data;
 
-    private static UDPReceive instance; // Singleton instance
+    private static UDPReceive1 instance; // Singleton instance
 
     private void Awake()
     {

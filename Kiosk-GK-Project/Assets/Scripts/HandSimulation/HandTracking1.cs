@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class HandTracking : MonoBehaviour
+public class HandTracking1 : MonoBehaviour
 {
-    public UDPReceive udpReceive; // Communication for Python
+    public UDPReceive1 udpReceive; // Communication for Python
     public GameObject[] handPoints; // List of the hand joints
     public GameObject WholeHand;
 
@@ -11,7 +11,7 @@ public class HandTracking : MonoBehaviour
         if (udpReceive == null)
         {
             // Dynamically find the UDPReceive instance
-            udpReceive = FindObjectOfType<UDPReceive>();
+            udpReceive = FindObjectOfType<UDPReceive1>();
             if (udpReceive == null)
             {
                 Debug.LogError("UDPReceive instance not found! Make sure it exists in the scene.");

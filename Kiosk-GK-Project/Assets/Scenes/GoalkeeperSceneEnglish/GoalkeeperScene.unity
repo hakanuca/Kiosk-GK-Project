@@ -603,8 +603,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 66886022}
-  - component: {fileID: 66886021}
-  - component: {fileID: 66886020}
+  - component: {fileID: 66886024}
+  - component: {fileID: 66886023}
   m_Layer: 0
   m_Name: ManagerRightHand
   m_TagString: Untagged
@@ -612,7 +612,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &66886020
+--- !u!4 &66886022
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 66886019}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -540, y: -960, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1089470409}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &66886023
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -621,10 +636,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 66886019}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86d26e25a6f3587429437b15aff5a619, type: 3}
+  m_Script: {fileID: 11500000, guid: b5887d84e50800b4dbf7c6d8bae4f6e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  udpReceive: {fileID: 66886021}
+  port: 5053
+  startReceiving: 1
+  printToConsole: 0
+  data: 
+--- !u!114 &66886024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 66886019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79851565c2d04b34e877f24f0811ebff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  udpReceive: {fileID: 66886023}
   handPoints:
   - {fileID: 1329724896}
   - {fileID: 1436782707}
@@ -648,37 +679,6 @@ MonoBehaviour:
   - {fileID: 604539808}
   - {fileID: 1727684764}
   WholeHand: {fileID: 1164242264}
---- !u!114 &66886021
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 66886019}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c28b88f6d5166d54d86c95571a78e6b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  port: 5053
-  startRecieving: 1
-  printToConsole: 0
-  data: 
---- !u!4 &66886022
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 66886019}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -540, y: -960, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1089470409}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &69060050 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 0004dca141c69904bb1ea84c28b49140, type: 3}
@@ -10677,7 +10677,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   port: 5052
-  startRecieving: 1
+  startReceiving: 1
   printToConsole: 0
   data: 
 --- !u!4 &1224533910
