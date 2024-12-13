@@ -1,11 +1,12 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class GoalCounter : MonoBehaviour
 {
-    public Text goalText;  // Reference to UI Text to display the goal count
+    public TextMeshProUGUI goalText;  // Reference to UI Text to display the goal count
     private int goalCount = 0;
     public GameObject gameOverText;
     public GameObject ballSpawner;
