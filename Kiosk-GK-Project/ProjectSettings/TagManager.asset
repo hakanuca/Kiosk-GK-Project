@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Ball
   - Ground
+  - Hand
+  - HandPoint
   layers:
   - Default
   - TransparentFX
