@@ -6,13 +6,19 @@ using UnityEngine.SceneManagement;
 
 public class GoalCounter : MonoBehaviour
 {
-    public TextMeshProUGUI goalText;  // Reference to UI Text to display the goal count
+    public TextMeshProUGUI goalText; // Reference to UI Text to display the goal count
     private int goalCount = 0;
     public GameObject gameOverText;
     public GameObject ballSpawner;
     public AudioClip goalSound; // Drag your sound clip here in the inspector
+    public GameObject firstPlaceImage; // Reference to 1st place image
+    public GameObject secondPlaceImage; // Reference to 2nd place image
+    public GameObject thirdPlaceImage; // Reference to 3rd place image
+    public Button menuButton; // Reference to the menu button
     private AudioSource audioSource;
-    
+
+    private SaveManager saveManager; // Reference to SaveManager
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,15 +29,34 @@ public class GoalCounter : MonoBehaviour
             audioSource = gameObject.AddComponent<AudioSource>();
         }
         audioSource.clip = goalSound;
+
+        // Hide the images and menu button initially
+        firstPlaceImage.SetActive(false);
+        secondPlaceImage.SetActive(false);
+        thirdPlaceImage.SetActive(false);
+        menuButton.gameObject.SetActive(false);
+
+        // Add listener to the menu button
+        menuButton.onClick.AddListener(ReloadScene);
+
+        // Get reference to the SaveManager
+        saveManager = FindObjectOfType<SaveManager>();
+        if (saveManager == null)
+        {
+            Debug.LogError("SaveManager not found in the scene!");
+        }
     }
 
     // This method is called when another collider enters the trigger collider
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Ball"))  // Check if the colliding object is the Ball
+        if (other.gameObject.CompareTag("Ball")) // Check if the colliding object is the Ball
         {
-            goalCount++;  // Increase the goal count
-            UpdateGoalText();  // Update the displayed text
+            goalCount++; // Increase the goal count
+            UpdateGoalText(); // Update the displayed text
+
+            // Add points to the score in SaveManager
+            saveManager.DeleteScore(100); // Example: each goal is worth 100 points
 
             // Play the goal sound when the ball enters the goal
             audioSource.Play();
@@ -48,17 +73,35 @@ public class GoalCounter : MonoBehaviour
         }
     }
 
-    // The function close the game after reaching the maximum goal
+    // The function to handle game over
     private void CallGameOverFunction()
     {
         ballSpawner.SetActive(false);
-        gameOverText.SetActive(true); // Sets the game over text
-        StartCoroutine(ReloadSceneAfterDelay(3f)); // Starts coroutine with 3 seconds delay
+        gameOverText.SetActive(true); // Display "Game Over"
+
+        int finalScore = saveManager.GetCurrentScore(); // Get final score from SaveManager
+
+        // Show the appropriate image based on the score range
+        if (finalScore < 800)
+        {
+            thirdPlaceImage.SetActive(true);
+        }
+        else if (finalScore < 1500)
+        {
+            secondPlaceImage.SetActive(true);
+        }
+        else
+        {
+            firstPlaceImage.SetActive(true);
+        }
+
+        // Show the menu button
+        menuButton.gameObject.SetActive(true);
     }
 
-    private IEnumerator ReloadSceneAfterDelay(float delay)
+    // Reload the current scene when the menu button is pressed
+    private void ReloadScene()
     {
-        yield return new WaitForSeconds(delay); // Waits for specified delay
         Scene currentScene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(currentScene.name); // Reloads the current scene
     }

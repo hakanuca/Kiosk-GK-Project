@@ -15,6 +15,18 @@ public class SaveManager : MonoBehaviour
         currentScore += points;
         UpdateScoreText();
     }
+    
+    public void DeleteScore(int points)
+    {
+        currentScore -= points;
+        UpdateScoreText();
+    }
+
+    // Method to get the current score
+    public int GetCurrentScore()
+    {
+        return currentScore;
+    }
 
     // Method to update the score text on the UI
     private void UpdateScoreText()
