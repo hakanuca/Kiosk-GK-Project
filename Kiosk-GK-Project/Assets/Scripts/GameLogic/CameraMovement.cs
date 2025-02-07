@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class CameraMovement : MonoBehaviour
 {
@@ -8,19 +9,22 @@ public class CameraMovement : MonoBehaviour
     public float targetZ = 12.1f;
     public float ySpeed = 2f;
     public float zSpeed = 2f;
+
     public Button startButton;
     public Button quitButton;
     public GameObject goText;
     public GameObject ballSpawner;
     public GameObject title;
-    public Button menuButton; 
+    public Button menuButton;
 
-    public float fadeDuration = 0.5f; // Duration for fade-out effect
+    public LightShowManager lightShowManager; // Reference to the light show manager
+
+    public float fadeDuration = 0.5f;
 
     private CanvasGroup startButtonCanvasGroup;
     private CanvasGroup quitButtonCanvasGroup;
     private CanvasGroup titleCanvasGroup;
-    private CanvasGroup menuButtonCanvasGroup; // New Menu button CanvasGroup
+    private CanvasGroup menuButtonCanvasGroup;
     private bool isMovementStarted = false;
 
     void Start()
@@ -29,15 +33,13 @@ public class CameraMovement : MonoBehaviour
         goText.SetActive(false);
         ballSpawner.SetActive(false);
 
-        // Get or add CanvasGroup components
         startButtonCanvasGroup = startButton.GetComponent<CanvasGroup>() ?? startButton.gameObject.AddComponent<CanvasGroup>();
         quitButtonCanvasGroup = quitButton.GetComponent<CanvasGroup>() ?? quitButton.gameObject.AddComponent<CanvasGroup>();
         titleCanvasGroup = title.GetComponent<CanvasGroup>() ?? title.AddComponent<CanvasGroup>();
         menuButtonCanvasGroup = menuButton.GetComponent<CanvasGroup>() ?? menuButton.gameObject.AddComponent<CanvasGroup>();
 
-        // Set initial state for menu button
-        menuButtonCanvasGroup.alpha = 0; // Invisible initially
-        menuButton.gameObject.SetActive(false); // Inactive initially
+        menuButtonCanvasGroup.alpha = 0;
+        menuButton.gameObject.SetActive(false);
     }
 
     void Update()
@@ -45,24 +47,32 @@ public class CameraMovement : MonoBehaviour
         if (isMovementStarted)
         {
             StartCoroutine(MoveCamera());
-            isMovementStarted = false; // Prevent restarting the coroutine
+            isMovementStarted = false;
         }
     }
 
     public void StartCameraMovement()
     {
         isMovementStarted = true;
-        StartCoroutine(FadeOutUI()); // Start the fade-out effect for the UI elements
+        StartCoroutine(FadeOutUI());
+
+        // Stop the light show when Play button is pressed
+        if (lightShowManager != null)
+        {
+            lightShowManager.StopLightShow();
+        }
     }
 
-    private System.Collections.IEnumerator FadeOutUI()
+
+
+
+    private IEnumerator FadeOutUI()
     {
         float elapsed = 0f;
         while (elapsed < fadeDuration)
         {
             float alpha = Mathf.Lerp(1, 0, elapsed / fadeDuration);
 
-            // Set alpha for each CanvasGroup
             startButtonCanvasGroup.alpha = alpha;
             quitButtonCanvasGroup.alpha = alpha;
             titleCanvasGroup.alpha = alpha;
@@ -71,41 +81,34 @@ public class CameraMovement : MonoBehaviour
             yield return null;
         }
 
-        // Set alpha to 0 to ensure it's fully transparent
         startButtonCanvasGroup.alpha = 0;
         quitButtonCanvasGroup.alpha = 0;
         titleCanvasGroup.alpha = 0;
 
-        // Optionally, disable the UI elements after fading out
         startButton.gameObject.SetActive(false);
         quitButton.gameObject.SetActive(false);
         title.SetActive(false);
 
-        // Fade in the Menu button
         StartCoroutine(FadeInMenuButton());
     }
 
-    private System.Collections.IEnumerator FadeInMenuButton()
+    private IEnumerator FadeInMenuButton()
     {
-        menuButton.gameObject.SetActive(true); // Activate the button
+        menuButton.gameObject.SetActive(true);
         float elapsed = 0f;
 
         while (elapsed < fadeDuration)
         {
             float alpha = Mathf.Lerp(0, 1, elapsed / fadeDuration);
-
-            // Set alpha for Menu button
             menuButtonCanvasGroup.alpha = alpha;
-
             elapsed += Time.deltaTime;
             yield return null;
         }
 
-        // Ensure alpha is fully set to 1
         menuButtonCanvasGroup.alpha = 1;
     }
 
-    System.Collections.IEnumerator MoveCamera()
+    private IEnumerator MoveCamera()
     {
         while (transform.position.y > targetY)
         {
@@ -122,11 +125,19 @@ public class CameraMovement : MonoBehaviour
         StartCoroutine(ShowResultObject());
     }
 
-    System.Collections.IEnumerator ShowResultObject()
+    private IEnumerator ShowResultObject()
     {
-        goText.SetActive(true);
-        yield return new WaitForSeconds(2);
+        goText.SetActive(true); // Show "GO" text
+        yield return new WaitForSeconds(2); // Wait for 2 seconds
+
         goText.SetActive(false);
         ballSpawner.SetActive(true);
+
+        // Stop the light show when the "GO" text appears
+        if (lightShowManager != null)
+        {
+            lightShowManager.StopLightShow();
+        }
     }
+
 }
